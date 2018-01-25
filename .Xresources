@@ -196,7 +196,7 @@ URxvt.keysym.C-V: perl:clipboard:paste
 URxvt.keysym.Control-v: perl:clipboard:paste
 
 !! get option over to work
-URxvt.keysym.M-Left:        \033[1;5D
-URxvt.keysym.M-Right:       \033[1;5C
+!URxvt.keysym.M-Left:        \033[1;5D
+!URxvt.keysym.M-Right:       \033[1;5C
 URxvt.keysym.Control-Left:  \033[1;5D
 URxvt.keysym.Control-Right: \033[1;5C

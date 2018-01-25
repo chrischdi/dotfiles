@@ -36,7 +36,8 @@ bindsym $mod+Shift+q kill
 # installed.
 bindsym $mod+d exec --no-startup-id i3-dmenu-desktop --dmenu='dmenu -l 8 -p "dmenu: " -i'
 
-bindsym $mod+l exec i3lock -c 11111
+bindsym $mod+l exec $HOME/.i3/fancy-i3lock
+#bindsym $mod+l exec i3lock -c 111111
 
 # change focus
 bindsym $mod+j focus left

@@ -41,9 +41,9 @@ if [ "$color_prompt" = yes ]; then
     last_exit_code() {
     	if [[ $? == 0 ]]; then
     		export EXIT_RED=""
-    		export EXIT_GREEN="+"
+    		export EXIT_GREEN="👍"
     	else
-    		export EXIT_RED="-"
+    		export EXIT_RED="👎"
     		export EXIT_GREEN=""
     	fi
     }
@@ -100,3 +100,5 @@ alias vi=vim
 if [ -f "$HOME/.bashrc.custom" ]; then
     . $HOME/.bashrc.custom
 fi
+
+alias nssh='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'

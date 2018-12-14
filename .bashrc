@@ -102,3 +102,4 @@ if [ -f "$HOME/.bashrc.custom" ]; then
 fi
 
 alias nssh='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+export GOPATH=$HOME/go

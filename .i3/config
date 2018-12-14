@@ -171,7 +171,7 @@ for_window [class="^Rambox$"] move to workspace 10
 
 # auto run commands
 exec --no-startup-id feh --bg-fill ${HOME}/Pictures/.wallpaper
-exec /usr/bin/compton --config $HOME/.compton.conf
+#exec /usr/bin/compton --config $HOME/.compton.conf
 
 exec_always --no-startup-id ${HOME}/.config/polybar/launch.sh
 

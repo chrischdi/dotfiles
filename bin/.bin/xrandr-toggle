@@ -1,0 +1,280 @@
+#!/usr/bin/python
+
+import logging
+import subprocess
+import re
+import sys
+
+def notify(text):
+    notify = subprocess.Popen('notify-send "{}"'.format(text), stdout=subprocess.PIPE, shell=True)
+    notify.wait()
+
+class Display:
+    def __init__(self, name, con, primary, rx, ry, px, py):
+        self.name = name
+        self.connected = con
+        self.primary = primary
+        self.res = (rx, ry)
+        self.pos = (px, py)
+        self.curres = (rx, ry)
+        self.curpos = (px, py)
+        self.current_args = []
+        if not self.connected:
+            self.off()
+        else:
+            self.current_args = self.args(self.curpos, self.curres)
+    def args(self, pos, res):
+        return ["--output", self.name, 
+                "--pos", "{}x{}".format(*pos),
+                "--mode", "{}x{}".format(*res)]
+
+    def setResolution(self, match):
+        rx = int(match.group('rx')) if match.group('rx') else 0
+        ry = int(match.group('ry')) if match.group('rx') else 0
+        self.res = (rx, ry)
+
+    @classmethod
+    def NewDisplay(cls, match):
+        rx = int(match.group('rx')) if match.group('rx') else 0
+        ry = int(match.group('ry')) if match.group('rx') else 0
+        px = int(match.group('px')) if match.group('rx') else 0
+        py = int(match.group('py')) if match.group('rx') else 0
+        return cls(
+            match.group('name'),
+            bool(match.group('con') == "connected"),
+            True if match.group('primary') else False,
+            rx,
+            ry,
+            px,
+            py
+        )
+
+    def __str__(self):
+        return "Name={} con={} Resolution={}x{} Pos={}x{}".format(
+            self.name,
+            self.connected,
+            self.res[0],
+            self.res[1],
+            self.pos[0],
+            self.pos[1]
+        )
+
+    def off(self):
+        self.current_args = ['--output', self.name, '--off']
+
+    def setPos(self, x, y):
+        self.current_args = self.args((x, y), self.res)
+
+class RandrState:
+    def __init__(self):
+        self.displays = set()
+        self.dis_displays = set()
+        pass
+
+    @classmethod
+    def StateFromXrandr(cls):
+        state = cls()
+        state.parseStateFromXrandr()
+        return state
+
+    def parseStateFromXrandr(self):
+        xrandr_stdout = self.readStateFromXrandr()
+
+        display_re = re.compile(
+            r'^(?P<name>\S+)\s+(?P<con>(connected|disconnected))\s((?P<primary>primary\s)?)+((?P<rx>\d+)x(?P<ry>\d+)\+(?P<px>\d+)\+(?P<py>\d+))?'
+        )
+        #mode_re = re.compile(r'^\s+(?P<rx>\d+)x(?P<ry>\d+)\s+\d+')
+        mode_re = re.compile(r'^\s+(?P<rx>\d+)x(?P<ry>\d+)\s+(?P<rate>\d+\.\d+)')
+
+        line = "foo"
+        while line:
+            line = xrandr_stdout.readline().decode("utf-8")
+            match = display_re.search(line)
+
+            if not match:
+                continue
+
+            d = Display.NewDisplay(match)
+
+            # ignore disconnected
+            if not d.connected:
+                self.AddDisDisplay(d)
+                continue
+
+            # we found a display. Add it
+            if d.connected and d.res != (0, 0):
+                # display having all information here. We don't change resolutions
+                logging.debug('Found active display {}'.format(d))
+                self.AddDisplay(d)
+            else:
+                # display without resolution set. Set first found
+                while line:
+                    line = xrandr_stdout.readline().decode("utf-8")
+                    match = mode_re.match(line)
+                    if not match:
+                        # no resolutions found
+                        break
+
+                    d.setResolution(match)
+                    logging.debug('Found active display {}'.format(d))
+                    self.AddDisplay(d)
+                    break
+
+        self.sort()
+
+    def sort(self):
+        pass
+
+    def AddDisplay(self, display):
+        self.displays.add(display)
+
+    def AddDisDisplay(self, display):
+        self.dis_displays.add(display)
+
+    def readStateFromXrandr(self):
+        xrandr = subprocess.Popen('xrandr -q', stdout=subprocess.PIPE, shell=True)
+        xrandr.wait()
+        return xrandr.stdout
+
+    def commit(self):
+        args = ["xrandr"]
+        for d in self.dis_displays:
+            args.extend(d.current_args)
+        for d in self.displays:
+            args.extend(d.current_args)
+
+        logging.debug('running "%s"' % ' '.join(args))
+        proc = subprocess.Popen(' '.join(args), stderr=subprocess.PIPE, shell=1)
+        if proc.wait():
+            error_msg = proc.stderr.read()
+            logging.error(error_msg)
+
+    def PrimaryOnly(self):
+        logging.debug("Setting primary only")
+        for d in self.displays:
+            if not d.primary:
+                d.off()
+        return "Primary only"
+
+    def LeftOfPrimary(self):
+        logging.debug("Setting left of primary")
+
+        primary = None
+        other = None
+
+        for d in self.displays:
+            if d.primary:
+                primary = d
+            if not d.primary:
+                other = d
+        self.setRelative(other, primary)
+        return "Left of Primary"
+
+    def RightOfPrimary(self):
+        logging.debug("Setting right of primary")
+
+        primary = None
+        other = None
+
+        for d in self.displays:
+            if d.primary:
+                primary = d
+            if not d.primary:
+                other = d
+        self.setRelative(primary, other)
+        return "Right of Primary"
+    
+    def Clone(self):
+        for d in self.displays:
+            d.setPos(0, 0)
+        return "Cloning"
+
+    def setRelative(self, left, right):
+        left.setPos(0, 0)
+        right.setPos(left.res[0],0)
+        
+
+class RandrStateMachine(object):
+    def __init__(self, state):
+        self.state = state
+
+    def NextState(self):
+        txt = ""
+        if len(self.state.displays) == 1:
+            pass
+        elif self.IsPrimaryOnly():
+            txt = self.state.RightOfPrimary()
+        elif self.IsRightOfPrimary():
+            txt = self.state.LeftOfPrimary()
+        elif self.IsLeftOfPrimary():
+            txt = self.state.Clone()
+        elif self.IsCloned():
+            txt = self.state.PrimaryOnly()
+
+        self.state.commit()
+        notify(txt)
+
+    def AllActive(self):
+        for d in self.state.displays:
+            if d.curres == (0, 0):
+                return False
+        return True
+    
+    def IsCloned(self):
+        if not self.AllActive():
+            return False
+        for d in self.state.displays:
+            if not d.curpos == (0, 0):
+                return False
+        return True
+        
+    def IsPrimaryOnly(self):
+        if self.AllActive():
+            return False
+        for d in self.state.displays:
+            if not d.primary and d.curres != (0, 0):
+                return False
+        return True
+
+    def IsLeftOfPrimary(self):
+        primary = None
+        other = None
+
+        for d in self.state.displays:
+            if d.primary:
+                primary = d
+            if not d.primary:
+                other = d
+
+        if other.curpos[0] < primary.curpos[0]:
+            return True
+        
+        return False
+            
+    def IsRightOfPrimary(self):
+        primary = None
+        other = None
+
+        for d in self.state.displays:
+            if d.primary:
+                primary = d
+            if not d.primary:
+                other = d
+        
+        if other.curpos[0] > primary.curpos[0]:
+            return True
+        
+        return False
+            
+
+
+        
+def main():
+    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+    state = RandrState.StateFromXrandr()
+    machine = RandrStateMachine(state)
+
+    machine.NextState()
+
+if __name__ == '__main__':
+  main()

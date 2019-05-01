@@ -1,0 +1,102 @@
+#!/bin/bash
+cmd="mplayer"
+
+usage () {
+	echo "Usage: radio <sender> [v]"
+	echo " 1 for StarFM"
+	echo " 2 for RadioBOB"
+	#echo " 2 for StarFM Alternative"
+	echo " 3 for RockAntenne"
+	echo " 4 for Jam FM"
+	echo " 5 for Dasding"
+	echo " 55 for BigFM"
+	echo " 6 for SWR1"
+	echo " 7 for SWR3"
+	echo " 77 for Radio 7"
+	echo " 8 for SWR4"
+	echo " 9 for AFN Stuttgart"
+	echo " 10 for irishpubradio.com"
+	echo " bob for radiobob"
+	echo " fc for Sport1.fm Konferenz"
+	echo " f[1-6] for Sport1.fm Spiel [1-6]"
+	
+	echo " Parameter v to use vlc instead of mplayer"
+}
+
+echo "2: "$2
+if [ "$2" = "v" ]; then
+	cmd="vlc"
+fi
+
+case $1 in
+1)
+#	cmd="$cmd http://85.25.209.150:8400"
+	cmd="$cmd http://91.250.82.237:8004"
+	;;
+2)
+	cmd="$cmd http://streams.radiobob.de/bob-live/mp3-128/bobmediaplayer"
+	#cmd="$cmd http://85.25.209.152:8300"
+	;;
+3)
+	cmd="$cmd http://mp3channels.webradio.antenne.de:80/rockantenne"
+	;;
+4)
+	cmd="$cmd http://stream.jam.fm/jamfm-nmr/mp3-128/directUrl"
+	;;
+5)
+	cmd="$cmd http://swr-mp3-m-dasding.akacast.akamaistream.net/7/588/137139/v1/gnl.akacast.akamaistream.net/swr-mp3-m-dasding"
+	;;
+6)
+	cmd="$cmd http://swr-mp3-s-swr1bw.akacast.akamaistream.net/7/395/137133/v1/gnl.akacast.akamaistream.net/swr-mp3-s-swr1bw"
+	;;
+7)
+	cmd="$cmd http://swr-mp3-s-swr3.akacast.akamaistream.net/7/203/137136/v1/gnl.akacast.akamaistream.net/swr-mp3-s-swr3"
+	;;
+8)
+	cmd="$cmd http://swr-mp3-s-swr4bw.akacast.akamaistream.net/7/638/137137/v1/gnl.akacast.akamaistream.net/swr-mp3-s-swr4bw"
+	;;
+9)
+	cmd="$cmd http://3983.live.streamtheworld.com/AFNE_STUAAC_SC"
+	;;
+10)
+	cmd="$cmd http://176.31.240.114:8326"
+#	cmd="$cmd http://www.irishpubradio.com/streams1/listen.pls"
+	;;
+55)
+  cmd="$cmd http://217.151.152.245:80/bigfm-mp3-96"
+	;;
+77)
+  cmd="$cmd http://srv01.radio7.fmstreams.de/stream1/livestream.mp3"
+	;;
+bob)
+	cmd="$cmd http://streams.radiobob.de/bob-live/mp3-192/mediaplayer"
+	;;
+fc)
+	cmd="$cmd http://stream.sport1.fm/api/livestream-redirect/SPORT1FM_24_7.mp3"
+	;;
+f1)
+	cmd="$cmd http://stream.sport1.fm/api/livestream-redirect/SPORT1FM_Einzel1.mp3"
+	;;
+f2)
+	cmd="$cmd http://stream.sport1.fm/api/livestream-redirect/SPORT1FM_Einzel2.mp3"
+	;;
+f3)
+	cmd="$cmd http://stream.sport1.fm/api/livestream-redirect/SPORT1FM_Einzel3.mp3"
+	;;
+f4)
+	cmd="$cmd http://stream.sport1.fm/api/livestream-redirect/SPORT1FM_Einzel4.mp3"
+	;;
+f5)
+	cmd="$cmd http://stream.sport1.fm/api/livestream-redirect/SPORT1FM_Einzel5.mp3"
+	;;
+f6)
+	cmd="$cmd http://stream.sport1.fm/api/livestream-redirect/SPORT1FM_Einzel6.mp3"
+	;;
+*)
+	usage
+	exit 1
+	;;
+esac
+
+echo $cmd
+$cmd

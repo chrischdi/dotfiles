@@ -113,7 +113,7 @@ export KUBE_EDITOR="vim"
 export HISTSIZE=100000
 export HISTFILESIZE=200000
 export GOPATH="$HOME/go"
-export PATH="$PATH:$HOME/go/bin:$HOME/.krew/bin"
+export PATH="$PATH:$HOME/.bin:$HOME/go/bin:$HOME/.krew/bin"
 
 alias timestamp='date +%s'
 alias vi=vim

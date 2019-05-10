@@ -1,0 +1,52 @@
+{
+    "editor.tabSize": 2,
+    "files.associations": {
+        "*.tf.ctmpl": "terraform"
+    },
+
+    "terminal.integrated.shell.linux": "/usr/bin/zsh",
+    "breadcrumbs.enabled": true,
+
+    "go.gopath": "$HOME/go",
+    "go.delveConfig": {
+        "useApiV1": false,
+        "dlvLoadConfig": {
+            "followPointers": true,
+            "maxVariableRecurse": 1, // default 1
+            "maxStringLen": 512, // default 64
+            "maxArrayValues": 64,
+            "maxStructFields": -1,
+            "showGlobalVariables": false
+        }
+    },
+
+    "go.useLanguageServer": true,
+    "go.alternateTools": {
+        "go-langserver": "gopls"
+    },
+    "go.languageServerExperimentalFeatures": {
+        "format": true,
+        "autoComplete": true,
+        "diagnostics": true,
+        // "goToDefinition": true,
+        // "hover": true,
+        // "signatureHelp": true,
+        // "goToTypeDefinition": true,
+        // "documentSymbols": true,
+    },
+    "go.buildOnSave": "off",
+    "go.vetOnSave": "off",
+    "[go]": {
+        "editor.snippetSuggestions": "none",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        },
+    },
+    "gopls": {
+        "usePlaceholders": true, // add parameter placeholders when completing a function
+        "enhancedHover": true,   // experimental to improve quality of hover (will be on by default soon)
+    },
+
+    "window.zoomLevel": 0,
+}

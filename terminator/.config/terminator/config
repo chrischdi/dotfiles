@@ -4,7 +4,7 @@
   title_inactive_fg_color = "#D8DEE9"
   title_receive_bg_color = "#8FBCBB"
   title_receive_fg_color = "#2E3440"
-  title_transmit_bg_color = "#88C0D0"
+  title_transmit_bg_color = "#88c0d0"
   title_transmit_fg_color = "#2E3440"
 [keybindings]
   go_down = <Alt><Super>Down
@@ -27,7 +27,7 @@
     cursor_color = "#aaaaaa"
     font = Noto Sans Mono 11
     foreground_color = "#f8f8f2"
-    palette = "#44475a:#ff5555:#50fa7b:#f1fa8c:#8be9fd:#bd93f9:#ff79c6:#94a3a5:#000000:#ff5555:#50fa7b:#f1fa8c:#8be9fd:#bd93f9:#ff79c6:#ffffff"
+    palette = "#282828:#cc241d:#98971a:#d79921:#458588:#b16286:#689d6a:#a89984:#928374:#fb4934:#b8bb26:#fabd2f:#83a598:#d3869b:#8ec07c:#ebdbb2"
     scrollback_infinite = True
     scrollbar_position = hidden
     show_titlebar = False

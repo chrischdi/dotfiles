@@ -126,6 +126,7 @@ if [[ $(cat /proc/cpuinfo | grep hypervisor) ]]; then
   alias google-chrome-stable="google-chrome-stable --disable-gpu "
 fi
 
+alias docker_binfmt="docker run --name multiarch --rm --privileged multiarch/qemu-user-static:register"
 
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/.bin" ]; then

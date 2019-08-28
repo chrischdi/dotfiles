@@ -1,0 +1,85 @@
+#!/bin/bash
+
+set -e
+# set -x
+
+function print_help () {
+  echo "Usage: $0 OUTPUTFILE"
+}
+
+function error () {
+  echo "[error]: $*" > /dev/stderr
+}
+
+function info () {
+  echo "[info]: $*"
+}
+
+# check input parameters
+
+if [ "$#" -ne 1 ] || [ -z "$1" ]; then
+  error "parameter missing"
+  print_help
+  exit 1
+fi
+OUTPUTFILE="$1"
+
+FILENAME="$(basename -- "$OUTPUTFILE")"
+
+if [ -f "$OUTPUTFILE" ]; then
+  error "file \"$OUTPUTFILE\" does already exist"
+  exit 1
+fi
+filename=$(basename -- "$fullfile")
+
+if [ "${FILENAME##*.}" != "mp4" ]; then
+  error "Unable to use '${FILENAME##*.}' as file extension for the output file '${OUTPUTFILE}'."
+  error "The output file needs to have '.mp4' as file extension"
+  exit 1
+fi
+
+function alsa::get_audio_device () {
+  DEVICE="$(grep -e '\[usbtv' /proc/asound/cards | awk '{print $1}')"
+  if [ -z "$DEVICE" ]; then
+    error "unable to detect usbtv via '/proc/asound/cards'"
+    exit 1
+  fi
+  echo "hw:${DEVICE},0"
+}
+
+function v4l2::get_video_device () {
+  DEVICE="$(v4l2-ctl --list-devices | grep usbtv -A 1 | tail -n 1 | awk '{print $1}')"
+  if [ -z "$DEVICE" ]; then
+    error "unable to detect usbtv video device via 'v4l2-ctl --list-devices'"
+    exit 1
+  fi
+  echo "${DEVICE}"
+}
+
+function ffmpeg::record () {
+  # usage: ffmpeg::record VIDEO_DEVICE AUDIO_DEVICE OUTPUTFILE
+  if [ "$#" -ne 3 ] || [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
+    error "wrong parameters"
+    exit 1
+  fi
+  
+  info "starting recording at $(date +"%Y-%m-%d %H:%M:%S") $0 $1 $2 $3"
+
+  ffmpeg \
+    -f v4l2 -standard PAL -thread_queue_size 512 -i "$1" \
+    -f alsa -thread_queue_size 512 -i "$2" \
+    -vcodec libx264 -preset superfast -crf 25 -s 720x576 -r 25 -aspect 4:3 \
+    -acodec libmp3lame -b:a 128k -channels 2 -ar 48000 \
+    "$3"
+}
+
+# detect usbtv
+
+lsusb | grep "EasyCAP" >/dev/null || error "usbtv not found via lsusb"
+VIDEO_DEVICE="$(v4l2::get_video_device)"
+AUDIO_DEVICE="$(alsa::get_audio_device)"
+
+echo "AUDIO_DEVICE=${AUDIO_DEVICE}"
+echo "VIDEO_DEVICE=${VIDEO_DEVICE}"
+
+ffmpeg::record "${VIDEO_DEVICE}" "${AUDIO_DEVICE}" "${OUTPUTFILE}"

@@ -173,6 +173,7 @@ for_window [class="^Rambox$"] move to workspace 10
 exec --no-startup-id feh --bg-fill ${HOME}/Pictures/.wallpaper
 #exec /usr/bin/compton --config $HOME/.compton.conf
 
+exec_always "setxkbmap -layout de,us -variant ,, -option grp:alt_shift_toggle"
 exec_always --no-startup-id ${HOME}/.config/polybar/launch.sh
 
 exec xrdb -merge $HOME/.Xresources

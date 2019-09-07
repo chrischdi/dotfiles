@@ -7,18 +7,18 @@
     "terminal.integrated.shell.linux": "/usr/bin/zsh",
     "breadcrumbs.enabled": true,
 
-    "go.gopath": "$HOME/go",
-    "go.delveConfig": {
-        "useApiV1": false,
-        "dlvLoadConfig": {
-            "followPointers": true,
-            "maxVariableRecurse": 1, // default 1
-            "maxStringLen": 512, // default 64
-            "maxArrayValues": 64,
-            "maxStructFields": -1,
-            "showGlobalVariables": false
-        }
-    },
+    "go.gopath": "/home/vagrant/go",
+    // "go.delveConfig": {
+    //     "useApiV1": false,
+    //     "dlvLoadConfig": {
+    //         "followPointers": true,
+    //         "maxVariableRecurse": 10, // default 1
+    //         "maxStringLen": 512, // default 64
+    //         "maxArrayValues": 64,
+    //         "maxStructFields": -1,
+    //         "showGlobalVariables": false
+    //     }
+    // },
 
     "go.useLanguageServer": true,
     "go.alternateTools": {
@@ -27,13 +27,17 @@
     "go.languageServerExperimentalFeatures": {
         "format": true,
         "autoComplete": true,
-        "diagnostics": true,
+        "diagnostics": false,
         // "goToDefinition": true,
         // "hover": true,
         // "signatureHelp": true,
         // "goToTypeDefinition": true,
         // "documentSymbols": true,
     },
+    "go.lintTool":"golangci-lint",
+    "go.lintFlags": [
+    "--fast"
+    ],
     "go.buildOnSave": "off",
     "go.vetOnSave": "off",
     "[go]": {
@@ -49,4 +53,28 @@
     },
 
     "window.zoomLevel": 0,
+    "cSpell.userWords": [
+        "Kubernetes",
+        "openstack"
+    ],
+    "editor.renderWhitespace": "none",
+    "editor.rulers": [
+        80,
+        120
+    ],
+    "vs-kubernetes": {
+        "vs-kubernetes.namespace": "",
+        "vs-kubernetes.kubectl-path": "/home/vagrant/bin/kubectl",
+        // "vs-kubernetes.kubectlVersioning": "user-provided",
+        "vs-kubernetes.outputFormat": "yaml",
+        "vs-kubernetes.kubeconfig": "",
+        "vs-kubernetes.knownKubeconfigs": [
+            "/home/vagrant/.kube/config",
+            "/tmp/kubeconfig.os1pi010",
+        ],
+        "vs-kubernetes.autoCleanupOnDebugTerminate": false,
+        "vs-kubernetes.nodejs-autodetect-remote-root": true,
+        "logsDisplay": "webview",
+        "imageBuildTool": "Docker"
+    },
 }

@@ -1,0 +1,33 @@
+[alias]
+        last = log -1 --stat
+        lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %Cblue<%an>%Creset' --abbrev-commit --date=relative --all
+
+[color]
+        ui = true
+
+[core]
+        editor = vim
+        autocrlf = input
+
+[push]
+	default = current
+
+[user]
+	name = Schlotter, Christian
+	email = christi.schlotter@gmail.com
+[credential]
+	helper = cache --timeout=3600
+[credential "https://github.com"]
+	username = chrischdi
+[credential "https://git.daimler.com"]
+	username = schloc
+[user "https://git.daimler.com"]
+	name = Schlotter, Christian (415)
+	email = christian.schlotter@daimler.com
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+

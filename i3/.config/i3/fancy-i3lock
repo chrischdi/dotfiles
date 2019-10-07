@@ -17,7 +17,7 @@ set -e
 # subshell this shiz
 (
 IMAGE=/tmp/i3lock.png
-LOCKIMG=$HOME/.i3/fancylock-lock.png
+LOCKIMG=$HOME/.config/i3/fancylock-lock.png
 
 # All options are here: http://www.imagemagick.org/Usage/blur/#blur_args
 # BLURTYPE="0x5" # 7.52s

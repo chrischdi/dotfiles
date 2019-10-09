@@ -25,10 +25,12 @@
     background_color = "#1e1f29"
     copy_on_selection = True
     cursor_color = "#aaaaaa"
+    custom_command = /usr/bin/zsh
     font = Noto Sans Mono 11
     foreground_color = "#f8f8f2"
     palette = "#44475a:#ff5555:#50fa7b:#f1fa8c:#8be9fd:#bd93f9:#ff79c6:#94a3a5:#aabbcc:#ff5555:#50fa7b:#f1fa8c:#8be9fd:#bd93f9:#ff79c6:#ffffff"
     scrollback_infinite = True
     scrollbar_position = hidden
     show_titlebar = False
+    use_custom_command = True
     use_system_font = False

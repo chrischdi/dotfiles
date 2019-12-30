@@ -8,7 +8,7 @@ export ZSH=$HOME/.oh-my-zsh
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-ZSH=/usr/share/oh-my-zsh/
+#ZSH=/usr/share/oh-my-zsh/
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -107,7 +107,7 @@ fi
 
 source $ZSH/oh-my-zsh.sh
 
-source /usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
+source /home/schloc/.zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 
 export KUBE_EDITOR="vim"
 export HISTSIZE=100000
@@ -125,7 +125,7 @@ if [[ $(cat /proc/cpuinfo | grep hypervisor) ]]; then
   alias code="code --disable-gpu "
   alias google-chrome-stable="google-chrome-stable --disable-gpu "
 fi
-
+source <(kubectl completion zsh)
 
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/.bin" ]; then
@@ -155,3 +155,5 @@ complete -o nospace -C /home/vagrant/bin/vault-1.0.3 vault
 complete -o nospace -C /home/vagrant/bin/consul-1.4.2 consul
 
 complete -o nospace -C /home/vagrant/bin/mc mc
+
+complete -o nospace -C /usr/local/bin/mc mc

@@ -22,13 +22,20 @@
 [plugins]
 [profiles]
   [[default]]
-    background_color = "#1e1f29"
     copy_on_selection = True
-    cursor_color = "#aaaaaa"
-    custom_command = /usr/bin/zsh
     font = Noto Sans Mono 11
-    foreground_color = "#f8f8f2"
-    palette = "#44475a:#ff5555:#50fa7b:#f1fa8c:#8be9fd:#bd93f9:#ff79c6:#94a3a5:#aabbcc:#ff5555:#50fa7b:#f1fa8c:#8be9fd:#bd93f9:#ff79c6:#ffffff"
+    custom_command = /usr/bin/zsh
+    #background_color = "#1e1f29"
+    #cursor_color = "#aaaaaa"
+    #foreground_color = "#f8f8f2"
+
+    # source: https://github.com/EliverLara/terminator-themes/blob/master/themes.json
+    #background_color = "#323232"
+    background_color = "#171717"
+    cursor_color = "#d6d6d6"
+    foreground_color = "#ffffff"
+    palette = "#353535:#d25252:#a5c261:#ffc66d:#6c99bb:#d197d9:#bed6ff:#eeeeec:#535353:#f00c0c:#c2e075:#e1e48b:#8ab7d9:#efb5f7:#dcf4ff:#ffffff"
+
     scrollback_infinite = True
     scrollbar_position = hidden
     show_titlebar = False

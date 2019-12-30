@@ -11,7 +11,8 @@ set $mod Mod4
 
 bar {
         #status_command exec /tmp/i3status
-        status_command exec $HOME/bin/i3-barista
+        tray_output primary
+        status_command exec $HOME/bin/i3-barista 
         font pango:DejaVu Sans Mono 11
         position top
 }
@@ -174,7 +175,7 @@ bindsym $mod+r mode "resize"
 # window configurations
 for_window [class="^Spotify$"] border none
 for_window [class="^Spotify$"] move to workspace 9
-for_window [class="^Rambox$"] move to workspace 10
+for_window [class="^Evolution$"] move to workspace 10
 
 # auto run commands
 exec --no-startup-id feh --bg-fill ${HOME}/Pictures/.wallpaper
@@ -182,5 +183,5 @@ exec --no-startup-id feh --bg-fill ${HOME}/Pictures/.wallpaper
 
 #exec_always --no-startup-id ${HOME}/.config/polybar/launch.sh
 
-exec xrdb -merge $HOME/.Xresources
-exec xrdb -merge $HOME/.Xdefaults
+exec --no-startup-id nm-applet
+

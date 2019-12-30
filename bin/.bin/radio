@@ -47,7 +47,7 @@ case $1 in
 	cmd="$cmd http://swr-mp3-m-dasding.akacast.akamaistream.net/7/588/137139/v1/gnl.akacast.akamaistream.net/swr-mp3-m-dasding"
 	;;
 6)
-	cmd="$cmd http://swr-mp3-s-swr1bw.akacast.akamaistream.net/7/395/137133/v1/gnl.akacast.akamaistream.net/swr-mp3-s-swr1bw"
+	cmd="$cmd $(curl http://mp3-live.swr.de/swr1bw_m.m3u | grep '^http')"
 	;;
 7)
 	cmd="$cmd http://swr-mp3-s-swr3.akacast.akamaistream.net/7/203/137136/v1/gnl.akacast.akamaistream.net/swr-mp3-s-swr3"

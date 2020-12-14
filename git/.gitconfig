@@ -7,7 +7,7 @@
 
 [core]
         editor = vim
-        autocrlf = input
+	autocrlf = input
 	askpass = /home/schloc/.ask-git-pass.sh
 
 [push]
@@ -15,20 +15,25 @@
 
 [user]
 	name = Schlotter, Christian
-	email = christi.schlotter@gmail.com
+	email = christian.schlotter@daimler.com
 [credential]
-#	helper = cache --timeout=3600
+	helper = cache --timeout=3600
+	#helper = store
 [credential "https://github.com"]
 	username = chrischdi
 [credential "https://git.daimler.com"]
 	username = schloc
+	
+[credential "https://git.cschlotter.de"]
+	username = work
 [user "https://git.daimler.com"]
 	name = Schlotter, Christian (415)
 	email = christian.schlotter@daimler.com
 
+[diff "sopsdiffer"]
+	textconv = sops -d
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
-

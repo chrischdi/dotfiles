@@ -1,3 +1,4 @@
+# zmodload zsh/zprof
 if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
   exec startx
 fi
@@ -113,19 +114,18 @@ export KUBE_EDITOR="vim"
 export HISTSIZE=100000
 export HISTFILESIZE=200000
 export GOPATH="$HOME/go"
-export PATH="$PATH:$HOME/.bin:$HOME/go/bin:$HOME/.krew/bin"
+export PATH="$PATH:$HOME/.bin:$HOME/go/bin:$HOME/.krew/bin:$HOME/bin"
 
 alias timestamp='date +%s'
 alias vi=vim
 alias nssh='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
-alias k='kubectl'
+alias -g k='kubectl '
 alias watch='watch '
 alias wn1='watch -n 1 '
 if [[ $(cat /proc/cpuinfo | grep hypervisor) ]]; then
-  alias code="code --disable-gpu "
+  alias code="codium --disable-gpu "
   alias google-chrome-stable="google-chrome-stable --disable-gpu "
 fi
-source <(kubectl completion zsh)
 
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/.bin" ]; then
@@ -137,6 +137,18 @@ fi
 
 prompt_dir() {
   prompt_segment blue black "${PWD##*/}"
+}
+prompt_segment() {
+  local bg fg
+  [[ -n $1 ]] && bg="%K{$1}" || bg="%k"
+  [[ -n $2 ]] && fg="%F{$2}" || fg="%f"
+  if [[ $CURRENT_BG != 'NONE' && $1 != $CURRENT_BG ]]; then
+    echo -n " %{$bg%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR%{$fg%} "
+  else
+    echo -n "%{$bg%}%{$fg%}"
+  fi
+  CURRENT_BG=$1
+  [[ -n $3 ]] && echo -n $3
 }
 
 autoload bashcompinit
@@ -150,10 +162,14 @@ alias tb="taskbook "
 
 #tb
 autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /home/vagrant/bin/vault-1.0.3 vault
+complete -o nospace -C /usr/local/bin/vault vault
 
-complete -o nospace -C /home/vagrant/bin/consul-1.4.2 consul
-
-complete -o nospace -C /home/vagrant/bin/mc mc
+complete -o nospace -C /usr/local/bin/consul consul
 
 complete -o nospace -C /usr/local/bin/mc mc
+
+source <(kubectl completion zsh)
+# zprof
+# zmodload -u zsh/zprof
+
+export DOCKER_BUILDKIT=1

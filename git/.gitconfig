@@ -8,7 +8,6 @@
 [core]
         editor = vim
 	autocrlf = input
-	askpass = /home/schloc/.ask-git-pass.sh
 
 [push]
 	default = current
@@ -17,8 +16,7 @@
 	name = Schlotter, Christian
 	email = christian.schlotter@daimler.com
 [credential]
-	helper = cache --timeout=3600
-	#helper = store
+	helper = gopass
 [credential "https://github.com"]
 	username = chrischdi
 [credential "https://git.daimler.com"]

@@ -10,3 +10,6 @@ feh --bg-fill ${HOME}/Pictures/.wallpaper
 i3-msg reload
 i3-msg restart
 
+# setxkbmap us -variant altgr-intl
+setxkbmap eu
+
